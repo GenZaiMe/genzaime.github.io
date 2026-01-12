@@ -201,9 +201,13 @@ body {
 }
 
 /* li の行間と余白 */
-.pz-md li {
+.pz-md li{
   margin: 0.4rem 0;
   line-height: 1.7;
+}
+.pz-block li{
+  margin: 0.4rem 0;
+  line-height: 1.4;
 }
 
 /* 通常の黒丸を消してカスタム表示 */
