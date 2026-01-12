@@ -3,7 +3,7 @@ title: "[Sample]プライバシーポリシー"
 _slug: 
 ---
 
-<!-- src\content\corporate\privacy.md: ここにプライバシーポリシーを記載します -->
+<!-- src\content\operations\privacy.md: ここにプライバシーポリシーを記載します -->
 
-- target: src\content\corporate\privacy.md
+- target: src\content\operations\privacy.md
 - footer: src\consts\consts.ts FOOTER_MENU
