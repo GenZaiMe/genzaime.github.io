@@ -72,7 +72,7 @@ export const HOME_BLOCKS = [
  * コーポレート情報（右側や cp ページで使う想定）
  */
 export const OPS_CONFIG = {
-  companyName: "GenZaiMe",
+  companyName: "GenZaiMe - 現在味",
   project_code:"GenZaiMe",
   project_code_jp:"現在味",
   description: "操作がわかりやすく。視認性が高く。拡張しやすく誰でも利用可能なテーマを提供しています。",
