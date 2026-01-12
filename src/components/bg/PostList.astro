@@ -1,0 +1,37 @@
+---
+/**
+ * ファイル: /src/components/bg/PostList.astro
+ * 役割: ブログ一覧（Content Collections: bg）
+ *
+ * 方針:
+ * - getCollection でID一覧を取得
+ * - getEntry で本体を取り直す
+ * - date は z.date() なので valueOf() でソート可能
+ */
+import { getCollection, getEntry } from "astro:content";
+const { limit = 10 } = Astro.props;
+
+const metas = await getCollection("bg");
+
+const posts = (await Promise.all(
+  metas.map(m => getEntry("bg", m.id))
+))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, limit);
+---
+<div class="space-y-3">
+  {posts.map((p) => (
+    <article class="bg-card">
+      <div class="text-xs pz-muted2">chikaru.com &gt; blog</div>
+      <a class="mt-1 block text-lg font-semibold pz-link" href={`/bg/${p.id}`}>
+        {p.data.title}
+      </a>
+      {p.data.description
+        ? <div class="mt-1 text-sm pz-muted">{p.data.description}</div>
+        : null}
+      <div class="mt-2 text-xs pz-muted2">
+        {p.data.date.toISOString().slice(0, 10)}
+      </div>
+    </article>
+  ))}
+</div>

@@ -1,0 +1,19 @@
+---
+/**
+ * ファイル: /src/components/ui/SiteHead.astro
+ * 役割: head に入れる基本メタ（title/description等）
+ */
+import { SITE_CONFIG } from "../../consts/consts";
+const { title, description } = Astro.props;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{title ? `${title} | ${SITE_CONFIG.title}` : SITE_CONFIG.title}</title>
+{description ? <meta name="description" content={description} /> : null}
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="Chikaru" />
+<link rel="manifest" href="/site.webmanifest" />

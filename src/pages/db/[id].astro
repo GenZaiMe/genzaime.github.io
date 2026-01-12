@@ -1,0 +1,23 @@
+---
+/**
+ * ファイル: /src/pages/db/[id].astro
+ * 役割: DB詳細（id可変）
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const items = await getCollection("db");
+  return items.map((x) => ({ params: { id: x.id }, props: { entry: x } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout view="page" title={entry.data.name} description={entry.data.summary ?? ""}>
+  <article class="pz-block pz-md">
+    <h1>{entry.data.name}</h1>
+    <div class="mt-6"><Content /></div>
+  </article>
+</BaseLayout>

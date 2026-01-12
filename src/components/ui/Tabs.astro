@@ -1,0 +1,13 @@
+---
+/**
+ * ファイル: /src/components/ui/Tabs.astro
+ * 役割: タブUI（現状は見た目のみ）
+ */
+import { UI_CONFIG } from "../../consts/consts";
+---
+
+<div class="flex gap-2 overflow-x-auto">
+  {UI_CONFIG.headerTabs.map((t) => (
+    <div class="pz-block py-2 text-sm whitespace-nowrap">{t.label}</div>
+  ))}
+</div>

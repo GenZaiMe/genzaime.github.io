@@ -1,0 +1,36 @@
+---
+/**
+ * ファイル: /src/pages/op/[...slug].astro
+ * 役割: Operations 配下の固定ページ（/op/*）
+ *
+ * ポイント:
+ * - Astro v5: entry.render() ではなく render(entry)
+ * - "_" で始まるslugは除外（作業中）
+ * - slug が未定義のケースに備えてガード
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, getEntry, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("op");
+  return pages
+    .filter((p) => p.id !== "index.md")
+    .filter((p) => !(p.slug ?? "").startsWith("_"))
+    .map((p) => ({
+      params: { slug: p.slug ?? p.id.replace(/\.md$/, "") },
+      props: { id: p.id },
+    }));
+}
+
+const { id } = Astro.props;
+const entry = await getEntry("op", id);
+const { Content } = await render(entry);
+const view = entry.data.view ?? "page";
+---
+
+<BaseLayout view={view} title={entry.data.title} description={entry.data.description ?? ""}>
+  <article class="pz-block pz-md">
+    <h1>{entry.data.title}</h1>
+    <div class="mt-6"><Content /></div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,20 @@
+---
+/**
+ * ファイル: /src/components/ui/Footer.astro
+ * 役割: 中央カラム下部のフッター（ブロック外 / センター表示）
+ */
+import { FOOTER_MENU, COPYRIGHT } from "../../consts/consts";
+const year = new Date().getFullYear();
+const from = COPYRIGHT.startYear;
+const yearText = from && from < year ? `${from}-${year}` : `${year}`;
+---
+
+<div class="pz-footer">
+  <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
+    {FOOTER_MENU.map((x) => (
+      <a class="pz-link" href={x.href}>{x.label}</a>
+    ))}
+  </div>
+
+  <div class="mt-3 text-xs pz-muted2">© {yearText} {COPYRIGHT.owner}</div>
+</div>

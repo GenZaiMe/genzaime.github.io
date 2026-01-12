@@ -1,0 +1,60 @@
+---
+import NavMobile from "./NavMobile.astro";
+import NavDesktop from "./NavDesktop.astro";
+import Footer from "./Footer.astro";
+import { DISPLAY_WIDGETS } from "../../consts/widgets";
+import WidgetRenderer from "./WidgetRenderer.astro";
+import TopBar from "./TopBar.astro";
+import "../../styles/global.css";
+
+// layout: "default" | "corp"
+const { layout = "default" } = Astro.props;
+---
+
+<div class="pz-bg min-h-screen">
+  <div class="mx-auto max-w-6xl px-3 pb-20 md:pb-6">
+
+    <!-- ここが「親コンテナ」。フッターはこの中央基準で揃う -->
+    <div class="flex min-h-[calc(100vh-2rem)] flex-col">
+<!-- PC(3カラム可能サイズ)用トップメニュー -->
+{layout === "_corp" ? null : <TopBar />}
+
+
+      <!-- 画面の上側（伸びる） -->
+      <div class="flex-1">
+        <div class={`grid grid-cols-1 md:grid-cols-[240px_1fr] ${layout === "corp" ? "" : "lg:grid-cols-[240px_1fr_320px]"} gap-4 pt-4`}>
+          <aside class="hidden md:block">
+            <NavDesktop />
+          </aside>
+
+          <main>
+            <slot />
+          </main>
+
+          {layout === "corp" ? null : (
+  <aside class="hidden lg:block space-y-3">
+    {DISPLAY_WIDGETS.map(w => (
+      <div class="pz-block">
+        <div class="text-sm font-semibold">{w.title}</div>
+        <div class="mt-2">
+          <WidgetRenderer code={w.code} />
+        </div>
+      </div>
+    ))}
+  </aside>
+)}
+        </div>
+      </div>
+
+      <!-- 画面の下側（余白があれば下に押し出される） -->
+      <div class="mt-auto">
+        <Footer />
+      </div>
+
+    </div>
+  </div>
+
+  <div class="md:hidden fixed left-0 right-0 bottom-0">
+    <NavMobile />
+  </div>
+</div>

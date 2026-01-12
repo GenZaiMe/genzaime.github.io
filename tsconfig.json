@@ -1,0 +1,10 @@
+/**
+ * ファイル: /tsconfig.json
+ * 役割: TypeScript 設定（Astro推奨のstrict構成）
+ */
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": "."
+  }
+}

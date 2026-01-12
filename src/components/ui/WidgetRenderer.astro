@@ -1,0 +1,29 @@
+---
+/**
+ * ファイル: /src/components/ui/WidgetRenderer.astro
+ * 役割: wsコードに応じてウィジェット本体を切り替える
+ */
+import WSPickup from "../widgets/ws-pickup.astro";
+import WSAds from "../widgets/ws-ads.astro";
+import WSCollab from "../widgets/ws-collab.astro";
+import WSTrend from "../widgets/ws-trend.astro";
+import WSGZ from "../widgets/ws-gz.astro";
+import WSSponsor from "../widgets/ws-sponsor.astro";
+import WSAstro from "../widgets/ws-astro.astro";
+
+const { code } = Astro.props;
+
+const map = {
+  "ws-pickup": WSPickup,
+  "ws-ads": WSAds,
+  "ws-collab": WSCollab,
+  "ws-trend": WSTrend,
+  "ws-gz": WSGZ,
+  "ws-sponsor": WSSponsor,
+  "ws-astro": WSAstro,
+};
+
+const Comp = map[code];
+---
+
+{Comp ? <Comp /> : <div class="text-xs pz-muted2">未定義ウィジェット: {code}</div>}

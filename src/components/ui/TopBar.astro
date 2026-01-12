@@ -1,0 +1,46 @@
+---
+/**
+ * ファイル: /src/components/ui/TopBar.astro
+ * 役割: PC(3カラム可能サイズ)時の上部メニュー
+ * - 左: サイト名
+ * - 中央: パン屑リスト風ナビ（どこにいるか分かる）
+ * - 右: SNSリンクやPC作業時に便利な要素を置く枠
+ *
+ * NOTE:
+ * - パン屑の表示名は /src/consts/navigation.ts の定義（labelForSegment）を正にする
+ */
+import { labelForSegment } from "../../consts/navigation";
+import { SITE_CONFIG } from "../../consts/consts";
+
+const path = Astro.url.pathname.split("/").filter(Boolean);
+const label = (p: string) => labelForSegment(p);
+---
+
+<div class="pz-topbar hidden lg:flex items-center justify-between px-3 py-2">
+  <!-- 左: サイト名 -->
+  <div class="font-semibold">
+    <a href="/" class="pz-link">{SITE_CONFIG.title}</a>
+  </div>
+
+  <!-- 中央: パン屑 -->
+  <nav class="text-sm pz-muted">
+    <a href="/" class="pz-link">Home</a>
+    {path.map((p, i) => (
+      <span>
+        {" / "}
+        <a href={"/" + path.slice(0, i+1).join("/")} class="pz-link">
+          {label(p)}
+        </a>
+      </span>
+    ))}
+  </nav>
+
+  <!-- 右: 追加リンク枠（必要に応じて差し替え） -->
+  <div class="flex gap-3 text-sm">
+    <!--
+    <a href="https://x.com/xxxx" class="pz-link" target="_blank" rel="noreferrer">X</a>
+    <a href="https://github.com/xxxx" class="pz-link" target="_blank" rel="noreferrer">GitHub</a>
+    <a href="/op/contact" class="pz-link">Contact</a>
+    -->
+  </div>
+</div>

@@ -1,0 +1,32 @@
+---
+/**
+ * ファイル: /src/pages/bg/[...slug].astro
+ * 役割: ブログ詳細（slug可変）
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, getEntry, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("bg");
+  return pages
+    .filter((p) => p.id !== "index.md")
+    .filter((p) => !(p.slug ?? "").startsWith("_"))
+    .map((p) => ({
+      params: { slug: p.slug ?? p.id.replace(/\.md$/, "") },
+      props: { id: p.id },
+    }));
+}
+
+const { id } = Astro.props;
+const entry = await getEntry("bg", id);
+const { Content } = await render(entry);
+const dateText = entry.data.date.toISOString().slice(0, 10);
+---
+
+<BaseLayout view="page" title={entry.data.title} description={entry.data.description ?? ""}>
+  <article class="pz-block pz-md">
+    <h1>{entry.data.title}</h1>
+    <div class="text-sm pz-muted2">{dateText}</div>
+    <div class="mt-6"><Content /></div>
+  </article>
+</BaseLayout>

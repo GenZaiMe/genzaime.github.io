@@ -1,0 +1,29 @@
+---
+/**
+ * ファイル: /src/components/db/ItemCard.astro
+ * 役割: DBブロック（Content Collections: db）
+ *
+ * NOTE:
+ * - 今は最初の1件だけ表示（デモ）
+ * - 将来、tagや価格などでカードを拡張しやすい
+ */
+import { getCollection } from "astro:content";
+const items = await getCollection("db");
+const first = items[0];
+---
+
+<section class="space-y-3">
+  <div class="pz-block">
+    <div class="pz-title pz-title-accent">DB</div>
+    <div class="mt-1 text-xs pz-muted2">商品/データのブロック</div>
+  </div>
+
+  {first ? (
+    <a class="db-card block" href={`/db/${first.slug}`}>
+      <div class="text-base font-semibold">{first.data.name}</div>
+      {first.data.summary ? <div class="mt-1 pz-muted">{first.data.summary}</div> : null}
+    </a>
+  ) : (
+    <div class="db-card"><div class="pz-muted">dbコンテンツがありません</div></div>
+  )}
+</section>

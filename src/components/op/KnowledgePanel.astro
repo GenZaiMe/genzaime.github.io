@@ -1,0 +1,15 @@
+---
+/**
+ * ファイル: /src/components/op/KnowledgePanel.astro
+ * 役割: コーポレート情報の表示（HOMEや /op で利用）
+ */
+import { OPS_CONFIG } from "../../consts/consts";
+---
+
+<section class="space-y-4">
+  <div class="cp-card">
+    <div class="text-base font-semibold">{OPS_CONFIG.companyName}</div>
+    <div class="mt-1 text-sm pz-muted">{OPS_CONFIG.description}</div>
+    <div class="mt-3 text-xs pz-muted2">{OPS_CONFIG.address}</div>
+  </div>
+</section>

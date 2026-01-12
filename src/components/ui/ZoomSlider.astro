@@ -1,0 +1,72 @@
+---
+/**
+ * ファイル: /src/components/ui/ZoomSlider.astro
+ * 役割: 表示倍率（ズーム）を簡単に切り替える
+ *
+ * 仕様:
+ * - 5段階: 0.8 / 0.9 / 1.0 / 1.1 / 1.25
+ * - 中央(通常)が 1.0
+ *
+ * 実装メモ:
+ * - Chrome想定で `zoom` を使用（簡単・軽い）
+ * - 保存は localStorage（不要なら削除可）
+ */
+const levels = [0.8, 0.9, 1.0, 1.1, 1.25];
+---
+
+<div class="pz-zoom">
+  <div class="flex items-center justify-between text-xs pz-muted2">
+    <span>Zoom</span>
+    <span id="pzZoomLabel">100%</span>
+  </div>
+
+  <input
+    id="pzZoomRange"
+    type="range"
+    min="0"
+    max="4"
+    step="1"
+    value="2"
+    class="w-full mt-2 pz-accent"
+    aria-label="Zoom"
+  />
+
+  <div class="flex justify-between text-[11px] pz-muted2 mt-1 select-none">
+    <span>80</span><span>90</span><span>100</span><span>110</span><span>125</span>
+  </div>
+</div>
+
+<script is:inline>
+(() => {
+  const key = "pz_zoom_index";
+  // 論理倍率（表示用）
+  const levels = [0.8, 0.9, 1.0, 1.1, 1.25];
+  // 視認性の底上げ係数（論理1.0を実表示1.25に）
+  const BASE = 1.25;
+
+  const range = document.getElementById("pzZoomRange");
+  const label = document.getElementById("pzZoomLabel");
+
+  const apply = (idx) => {
+    const i = Math.min(levels.length - 1, Math.max(0, Number(idx)));
+    const logical = levels[i] ?? 1.0;   // スライダー上の論理倍率
+    const actual = logical * BASE;      // 実際の表示倍率（文字基準）
+    document.documentElement.style.setProperty("--ui-scale", String(actual));
+    if (label) label.textContent = Math.round(logical * 100) + "%";
+  };
+
+  // init（論理の初期値は1.0＝中央）
+  const saved = localStorage.getItem(key);
+  const initIdx = saved !== null ? Number(saved) : 2; // 0.8,0.9,1.0,1.1,1.25 の中央=2
+  if (range) range.value = String(initIdx);
+  apply(initIdx);
+
+  range?.addEventListener("input", (e) => {
+    const idx = e.target?.value ?? "2";
+    localStorage.setItem(key, String(idx));
+    apply(idx);
+  });
+})();
+</script>
+
+

@@ -1,0 +1,20 @@
+---
+/**
+ * ファイル: /src/pages/db/index.astro
+ * 役割: DB一覧（コンテンツのカード表示）
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+const items = await getCollection("db");
+---
+
+<BaseLayout view="list" title="DB">
+  <div class="space-y-3">
+    {items.map((x) => (
+      <a class="db-card block" href={`/db/${x.id}`}>
+        <div class="text-base font-semibold">{x.data.name}</div>
+        {x.data.summary ? <div class="mt-1 pz-muted">{x.data.summary}</div> : null}
+      </a>
+    ))}
+  </div>
+</BaseLayout>

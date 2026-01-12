@@ -1,0 +1,35 @@
+---
+/**
+ * ファイル: /src/components/ui/ThemeToggle.astro
+ * 役割: dark/light の切替
+ *
+ * ポイント:
+ * - これは「保存する」（localStorage）
+ * - thema（アクセント）は保存しない方針なので、ここでは触りません
+ */
+---
+
+<button id="pzThemeBtn" class="pz-block w-full text-left text-sm">
+  Mode: <span id="pzThemeLabel">dark</span>
+</button>
+
+<script>
+  const key = "pz_theme";
+  const btn = document.getElementById("pzThemeBtn");
+  const label = document.getElementById("pzThemeLabel");
+
+  const get = () => document.documentElement.getAttribute("data-theme") || "dark";
+  const set = (v) => document.documentElement.setAttribute("data-theme", v);
+
+  const sync = () => { label.textContent = get(); };
+
+  btn?.addEventListener("click", () => {
+    const cur = get();
+    const next = cur === "dark" ? "light" : "dark";
+    set(next);
+    localStorage.setItem(key, next);
+    sync();
+  });
+
+  sync();
+</script>

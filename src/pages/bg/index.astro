@@ -1,0 +1,19 @@
+---
+/**
+ * ファイル: /src/pages/bg/index.astro
+ * 役割: ブログ一覧ページ
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostList from "../../components/bg/PostList.astro";
+---
+
+<BaseLayout view="list" title="Blog">
+  <div class="space-y-4">
+    <div class="pz-block">
+      <div class="pz-title pz-title-accent">Blog</div>
+      <div class="mt-1 text-xs pz-muted2">ブログにて最新情報をお届け</div>
+    </div>
+
+    <PostList limit={50} />
+  </div>
+</BaseLayout>

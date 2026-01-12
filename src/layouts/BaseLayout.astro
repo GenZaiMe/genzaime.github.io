@@ -1,0 +1,90 @@
+---
+/**
+ * ファイル: /src/layouts/BaseLayout.astro
+ * 役割: 全ページ共通の枠（head + Shell）
+ *
+ * テーマ/アクセント:
+ * - data-theme: dark / light
+ * - data-accent: mr/gg/pb/ps/pg/dy
+ *
+ * URLパラメータ:
+ * - ?thema=mr でアクセントを切り替え（保存しない）
+ * - thema がある時だけ、ページ内の内部リンクへ thema を自動付与して維持
+ */
+import SiteHead from "../components/ui/SiteHead.astro";
+import Shell from "../components/ui/Shell.astro";
+import { SITE_CONFIG } from "../consts/consts";
+const { title = SITE_CONFIG.title, description = "", layout = "default", view = "list" } = Astro.props;
+---
+
+<html lang={SITE_CONFIG.lang} data-theme={SITE_CONFIG.defaultTheme} data-accent={SITE_CONFIG.defaultAccent} data-view={view}>
+  <head>
+    <SiteHead title={title} description={description} />
+
+    <script is:inline>
+      (() => {
+        // -----------------------
+        // 1) dark / light（保存）
+        // -----------------------
+        const themeKey = "pz_theme";
+        const savedTheme = localStorage.getItem(themeKey);
+        if (savedTheme === "dark" || savedTheme === "light") {
+          document.documentElement.setAttribute("data-theme", savedTheme);
+        }
+
+        // -----------------------
+        // 2) accent（URL指定のみ / 保存しない）
+        // -----------------------
+        const allowed = new Set(["mr","gg","pb","ps","pg","dy"]);
+        const params = new URLSearchParams(location.search);
+        const t = (params.get("thema") || "").trim().toLowerCase();
+
+        if (allowed.has(t)) {
+          document.documentElement.setAttribute("data-accent", t);
+        }
+
+        // -----------------------
+        // 3) thema 指定がある時だけ、内部リンクに thema を付けて維持
+        // -----------------------
+        if (allowed.has(t)) {
+          const addThema = (a) => {
+            try {
+              const href = a.getAttribute("href") || "";
+              if (!href) return;
+
+              // 外部リンク・アンカー・mailto/tel は対象外
+              if (href.startsWith("http://") || href.startsWith("https://") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+              if (href.startsWith("#")) return;
+
+              const u = new URL(href, location.origin);
+              if (!u.searchParams.get("thema")) u.searchParams.set("thema", t);
+
+              a.setAttribute("href", u.pathname + (u.search ? u.search : "") + (u.hash ? u.hash : ""));
+            } catch {}
+          };
+
+          document.querySelectorAll("a[href]").forEach(addThema);
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <Shell layout={layout}>
+      <slot />
+    </Shell>
+
+    {/* analytics（gtagIdがある時だけ出す） */}
+    {SITE_CONFIG.analytics.enabled && SITE_CONFIG.analytics.gtagId ? (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE_CONFIG.analytics.gtagId}`}></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '{SITE_CONFIG.analytics.gtagId}');
+        </script>
+      </>
+    ) : null}
+  </body>
+</html>
