@@ -2,23 +2,31 @@
  * ファイル: /astro.config.mjs
  * 役割: Astroの全体設定（Tailwind, sitemap など）
  *
- * sitemap 方針:
- * - content は開発用に増やしてOK
- * - sitemap に載せる対象は /src/consts/navigation.ts の SITEMAP_SECTIONS を正とする
- * - ただし、パスのどこかが `_` で始まるものは除外（開発途中コンテンツ想定）
+ * 目的:
+ * - build 時に JS/CSS/HTML を強めに圧縮
+ * - 可能な限りコメントを削除
+ * - 追加圧縮（astro-compress）はデフォルトOFF
  */
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
+import compress from "astro-compress";
 
 import { SITE_CONFIG } from "./src/consts/consts";
 import { SITEMAP_SECTIONS } from "./src/consts/navigation";
 
+/** 追加圧縮を使うかどうか（テンプレ利用者が切り替える用） */
+const USE_EXTRA_COMPRESS = true;
+
 export default defineConfig({
-  compressHTML: true,
   site: SITE_CONFIG.siteUrl,
+
+  // HTML圧縮（Astro側）
+  compressHTML: true,
+
   integrations: [
     tailwind(),
+
     sitemap({
       filter: (page) => {
         const path = new URL(page).pathname;
@@ -35,7 +43,41 @@ export default defineConfig({
 
         const allowed = new Set(SITEMAP_SECTIONS.map((s) => s.key));
         return allowed.has(first);
-      }
-    })
-  ]
+      },
+    }),
+
+    // 追加圧縮（必要な人だけONにする）
+    ...(USE_EXTRA_COMPRESS
+      ? [
+          compress({
+            HTML: true,
+            CSS: true,
+            JS: true,
+            SVG: true,
+            Image: false, // 初期は重いのでOFF
+            Font: true,
+          }),
+        ]
+      : []),
+  ],
+
+  // ここが「強め圧縮」の本体（Vite/esbuild）
+  vite: {
+    build: {
+      // JS圧縮
+      minify: "esbuild",
+
+      // CSS圧縮
+      cssMinify: "esbuild",
+    },
+    esbuild: {
+      // コメントを出さない
+      legalComments: "none",
+
+      // 追加最適化
+      minifyIdentifiers: true,
+      minifySyntax: true,
+      minifyWhitespace: true,
+    },
+  },
 });

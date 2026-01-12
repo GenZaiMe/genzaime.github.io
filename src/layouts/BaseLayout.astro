@@ -5,7 +5,7 @@
  *
  * テーマ/アクセント:
  * - data-theme: dark / light
- * - data-accent: mr/gg/pb/ps/pg/dy
+ * - data-accent: mr/gg/pb/ps/pg/dy/so
  *
  * URLパラメータ:
  * - ?thema=mr でアクセントを切り替え（保存しない）
@@ -35,7 +35,7 @@ const { title = SITE_CONFIG.title, description = "", layout = "default", view = 
         // -----------------------
         // 2) accent（URL指定のみ / 保存しない）
         // -----------------------
-        const allowed = new Set(["mr","gg","pb","ps","pg","dy"]);
+        const allowed = new Set(["mr","gg","pb","ps","pg","dy","so"]);
         const params = new URLSearchParams(location.search);
         const t = (params.get("thema") || "").trim().toLowerCase();
 

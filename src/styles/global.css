@@ -19,7 +19,7 @@
 
   /* 表示倍率（ZoomSliderで変更） */
 /* アクセント（デフォルトは stone） */
-  --accent: #444444;
+  --accent: #ff4d00;
 
   /* 文字色（darkは白基調） */
   --fg: rgba(255,255,255,0.94);
@@ -56,6 +56,7 @@ html[data-accent="pb"] { --accent:#00ccff; }
 html[data-accent="ps"] { --accent:#444444; }
 html[data-accent="pg"] { --accent:#37474F; }
 html[data-accent="dy"] { --accent:#eeff00; }
+html[data-accent="so"] { --accent:#ff4d00; }
 
 /* ---------- View（list / page） ----------
    使い分けの入口だけ用意しています。

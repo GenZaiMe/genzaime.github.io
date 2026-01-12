@@ -5,21 +5,21 @@
  * ここは「後から差し替えが簡単」なように、値を1箇所に寄せています。
  */
 
-export type ThemeCode = "mr" | "gg" | "pb" | "ps" | "pg" | "dy";
+export type ThemeCode = "mr" | "gg" | "pb" | "ps" | "pg" | "dy" | "so";
 
 export const SITE_CONFIG = {
   // ★サイトの正しいURLに変更してください（sitemapやOGP等で使う想定）
   siteUrl: "https://genzai.me",
 
-  title: "GenZaiMe",
+  title: "GenZaiMe - 現在味",
   lang: "ja",
 
   // dark/light はモード（文字色と背景のコントラスト）
   defaultTheme: "dark" as "dark" | "light",
 
   // ★アクセントは「枠・見出し・Markdown装飾」にだけ使う想定
-  // chikarucom は red(mr) を既定にする
-  defaultAccent: "mr" as ThemeCode,
+  // GenZaiMe は red(mr) を既定にする
+  defaultAccent: "so" as ThemeCode,
 
   analytics: {
     // Google Analytics / gtag を使う場合に設定
@@ -120,4 +120,13 @@ export const FOOTER_MENU = [
 export const COPYRIGHT = {
   owner: "GenZaiMe",
   startYear: 2026
+};
+
+/**
+ * robots.txt
+ */
+export const ROBOTS = {
+  enabled: true,
+  allowAll: true,
+  useSitemap: true,
 };
